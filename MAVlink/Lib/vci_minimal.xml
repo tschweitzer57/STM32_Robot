@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<!-- Author : Thibault SCHWEITZER-->
+<!-- Date : 18.12.23 -->
+<mavlink>
+	<!--include>standard.xml</include-->
+	<version>1</version>
+	<dialect>0</dialect>
+	<enums>
+		<enum name="VEHICLE_ACTION">
+			<description>These values define the type of actions for the vehicle.</description>
+			<entry value="0" name="VEHICLE_ACTION_STOP">
+				<description>The vehicle stops</description>
+			</entry>
+			<entry value="1" name="VEHICLE_ACTION_IDLE">
+				<description>The vehicle do nothing</description>
+			</entry>
+			<entry value="2" name="VEHICLE_ACTION_PAUSE">
+				<description>The vehicle temporarily stop its actions</description>
+			</entry>
+			<entry value="3" name="VEHICLE_ACTION_RESUME">
+				<description>The vehicle resume its actions if it was paused</description>
+			</entry>
+			<entry value="4" name="VEHICLE_ACTION_MOVE_FWD">
+				<description>The vehicle move forward for a certain distance</description>
+			</entry>
+			<entry value="5" name="VEHICLE_ACTION_MOVE_BWD">
+				<description>The vehicle move backward for a certain distance</description>
+			</entry>
+			<entry value="6" name="VEHICLE_ACTION_ROTATE_R">
+				<description>The vehicle rotate right of n degrees</description>
+			</entry>
+			<entry value="7" name="VEHICLE_ACTION_ROTATE_L">
+				<description>The vehicle rotate left of n degrees</description>
+			</entry>
+			<entry value="8" name="VEHICLE_ACTION_CIRCLE">
+				<description>The vehicle rotate left of n degrees</description>
+			</entry>
+			<entry value="9" name="VEHICLE_ACTION_SQUARE">
+				<description>The vehicle rotate left of n degrees</description>
+			</entry>
+		</enum>
+		<enum name="CAMERA_DETECTION">
+			<description>These values define the type of apriltag detected by the camera.</description>
+			<entry value="0" name="CAMERA_DETECTION_APRILTAG_0">
+				<description>The camera detected the apriltag 0</description>
+			</entry>
+			<entry value="1" name="CAMERA_DETECTION_APRILTAG_1">
+				<description>The camera detected the apriltag 1</description>
+			</entry>
+			<entry value="2" name="CAMERA_DETECTION_APRILTAG_2">
+				<description>The camera detected the apriltag 2</description>
+			</entry>
+			<entry value="3" name="CAMERA_DETECTION_APRILTAG_3">
+				<description>The camera detected the apriltag 3</description>
+			</entry>
+			<entry value="4" name="CAMERA_DETECTION_APRILTAG_4">
+				<description>The camera detected the apriltag 4</description>
+			</entry>
+		</enum>
+		<enum name="DEVICE_ID">
+			<description>These values define the id of the device.</description>
+			<entry value="0" name="DEVICE_ID_STM32">
+				<description>ID of the STM32 card</description>
+			</entry>
+			<entry value="1" name="DEVICE_ID_RASPBERRYPI">
+				<description>ID of the RASPBERRYPI card</description>
+			</entry>
+			<entry value="2" name="DEVICE_ID_GCS">
+				<description>ID of the ground control station</description>
+			</entry>
+		</enum>
+	</enums>
+	<messages>
+		<message id="1" name="HEARTBEAT_VCI">
+			<description>The simplest message to indicate if a device is connected (UART, UDP, ...)</description>
+			<field type="uint64_t" name="timestamp" units="us">Timestamp of the message</field>
+			<field type="uint8_t" name="device_id" enum="DEVICE_ID">Id of the sender device</field>
+		</message>
+		<message id="2" name="VEHICLE_COMMAND_ACTION">
+			<description>This message indicates the command required by a user</description>
+			<field type="uint64_t" name="timestamp" units="us">Timestamp of the message</field>
+			<field type="uint8_t" name="vehicle_action" enum="VEHICLE_ACTION">Vehicle action requested</field>
+		</message>
+		<message id="3" name="SENSOR_CAMERA_DETECTION">
+			<description>Message giving the id of the identified april tag</description>
+			<field type="uint64_t" name="timestamp" units="us">Timestamp of the message</field>
+			<field type="uint8_t" name="identified_apriltag" enum="CAMERA_DETECTION">Apriltag identified</field>
+		</message>
+	</messages>
+</mavlink>
