@@ -2,6 +2,14 @@ import socket
 import threading
 from time import sleep
 
+# create a socket object
+client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server_ip = "192.168.1.16"  # replace with the server's IP address
+server_port = 8000  # replace with the server's port number
+
+# establish connection with server
+client.connect((server_ip, server_port))
+
 def start_client():
     print('\n')
     print('            _     _      _          ___ _ _            _             _   ___  ')
@@ -43,15 +51,6 @@ def rec_client():
     # close client socket (connection to the server)
     client.close()
     print("Connection to server closed")
-
-#if '__name__' == '__main__':
-# create a socket object
-client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server_ip = "192.168.1.16"  # replace with the server's IP address
-server_port = 8000  # replace with the server's port number
-
-# establish connection with server
-client.connect((server_ip, server_port))
 
 # recvThread create
 recThread = threading.Thread(target=rec_client)

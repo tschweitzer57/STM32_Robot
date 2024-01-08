@@ -45,47 +45,65 @@ def run_server():
         elif request.lower() == "idle":
             # Send a vehicle_command_action message
             msg = mav.vehicle_command_action_encode(int(time.time()), Mavlink_lib_vci.VEHICLE_ACTION_IDLE)
+            msg_packed = msg.pack(mav)
+            ser.write(msg_packed)
             client_socket.send("robot doing nothing".encode("utf-8"))
         
         elif request.lower() == "stop":
             msg = mav.vehicle_command_action_encode(int(time.time()), Mavlink_lib_vci.VEHICLE_ACTION_STOP)
+            msg_packed = msg.pack(mav)
+            ser.write(msg_packed)
             client_socket.send("robot stopping action".encode("utf-8"))
 
         elif request.lower() == "pause":
             msg = mav.vehicle_command_action_encode(int(time.time()), Mavlink_lib_vci.VEHICLE_ACTION_PAUSE)
+            msg_packed = msg.pack(mav)
+            ser.write(msg_packed)
             client_socket.send("robot pausing ...".encode("utf-8"))
                 
         elif request.lower() == "resume":
             msg = mav.vehicle_command_action_encode(int(time.time()), Mavlink_lib_vci.VEHICLE_ACTION_RESUME)
+            msg_packed = msg.pack(mav)
+            ser.write(msg_packed)
             client_socket.send("resume action".encode("utf-8"))
                 
         elif request.lower() == "forward":
             msg = mav.vehicle_command_action_encode(int(time.time()), Mavlink_lib_vci.VEHICLE_ACTION_MOVE_FWD)
+            msg_packed = msg.pack(mav)
+            ser.write(msg_packed)
             client_socket.send("robot moving forward".encode("utf-8"))
 
         elif request.lower() == "backward":
             msg = mav.vehicle_command_action_encode(int(time.time()), Mavlink_lib_vci.VEHICLE_ACTION_MOVE_BWD)
+            msg_packed = msg.pack(mav)
+            ser.write(msg_packed)
             client_socket.send("robot moving backward".encode("utf-8"))
 
         elif request.lower() == "left":
             msg = mav.vehicle_command_action_encode(int(time.time()), Mavlink_lib_vci.VEHICLE_ACTION_ROTATE_L)
+            msg_packed = msg.pack(mav)
+            ser.write(msg_packed)
             client_socket.send("robot rotating left".encode("utf-8"))
 
         elif request.lower() == "right":
             msg = mav.vehicle_command_action_encode(int(time.time()), Mavlink_lib_vci.VEHICLE_ACTION_ROTATE_R)
-            
+            msg_packed = msg.pack(mav)
+            ser.write(msg_packed)
             client_socket.send("robot rotating right".encode("utf-8"))
                 
         elif request.lower() == "square":
             msg = mav.vehicle_command_action_encode(int(time.time()), Mavlink_lib_vci.VEHICLE_ACTION_SQUARE)
+            msg_packed = msg.pack(mav)
+            ser.write(msg_packed)
             client_socket.send("robot moving in square".encode("utf-8"))
 
         elif request.lower() == "circle":
             msg = mav.vehicle_command_action_encode(int(time.time()), Mavlink_lib_vci.VEHICLE_ACTION_CIRCLE)
+            msg_packed = msg.pack(mav)
+            ser.write(msg_packed)
             client_socket.send("robot moving in circle".encode("utf-8"))
 
-        msg_packed = msg.pack(mav)
-        ser.write(msg_packed)
+        
         print(f"Received: {request}")
 
         # response = "accepted".encode("utf-8") # convert string to bytes
@@ -99,5 +117,4 @@ def run_server():
     server.close()
     ser.close()
 
-if '__name__' == '__main__':
-    run_server()
+run_server()
