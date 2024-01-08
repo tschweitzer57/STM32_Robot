@@ -19,6 +19,15 @@ def run_server():
     # accept incoming connections
     client_socket, client_address = server.accept()
     print(f"Accepted connection from {client_address[0]}:{client_address[1]}")
+    
+    # Create a UART port
+    baudrate = 115200
+    uart_port = "/dev/ttyS0"
+    ser = serial.Serial(uart_port, baudrate)
+    
+    # Create a MAVLink instance
+    file = open('buf_server.txt', 'rb')
+    mav = Mavlink_lib_vci.MAVLink(file)
 
     # receive data from the client
     while True:
@@ -34,35 +43,49 @@ def run_server():
             break
 
         elif request.lower() == "idle":
-                client_socket.send("robot doing nothing".encode("utf-8"))
+            # Send a vehicle_command_action message
+            msg = mav.vehicle_command_action_encode(int(time.time()), Mavlink_lib_vci.VEHICLE_ACTION_IDLE)
+            client_socket.send("robot doing nothing".encode("utf-8"))
         
         elif request.lower() == "stop":
-                client_socket.send("robot stopping action".encode("utf-8"))
+            msg = mav.vehicle_command_action_encode(int(time.time()), Mavlink_lib_vci.VEHICLE_ACTION_STOP)
+            client_socket.send("robot stopping action".encode("utf-8"))
 
         elif request.lower() == "pause":
-                client_socket.send("robot pausing ...".encode("utf-8"))
+            msg = mav.vehicle_command_action_encode(int(time.time()), Mavlink_lib_vci.VEHICLE_ACTION_PAUSE)
+            client_socket.send("robot pausing ...".encode("utf-8"))
                 
         elif request.lower() == "resume":
-                client_socket.send("resume action".encode("utf-8"))
+            msg = mav.vehicle_command_action_encode(int(time.time()), Mavlink_lib_vci.VEHICLE_ACTION_RESUME)
+            client_socket.send("resume action".encode("utf-8"))
                 
         elif request.lower() == "forward":
-                client_socket.send("robot moving forward".encode("utf-8"))
+            msg = mav.vehicle_command_action_encode(int(time.time()), Mavlink_lib_vci.VEHICLE_ACTION_MOVE_FWD)
+            client_socket.send("robot moving forward".encode("utf-8"))
 
         elif request.lower() == "backward":
-                client_socket.send("robot moving backward".encode("utf-8"))
+            msg = mav.vehicle_command_action_encode(int(time.time()), Mavlink_lib_vci.VEHICLE_ACTION_MOVE_BWD)
+            client_socket.send("robot moving backward".encode("utf-8"))
 
         elif request.lower() == "left":
-                client_socket.send("robot rotating left".encode("utf-8"))
+            msg = mav.vehicle_command_action_encode(int(time.time()), Mavlink_lib_vci.VEHICLE_ACTION_ROTATE_L)
+            client_socket.send("robot rotating left".encode("utf-8"))
 
         elif request.lower() == "right":
-                client_socket.send("robot rotating right".encode("utf-8"))
+            msg = mav.vehicle_command_action_encode(int(time.time()), Mavlink_lib_vci.VEHICLE_ACTION_ROTATE_R)
+            
+            client_socket.send("robot rotating right".encode("utf-8"))
                 
         elif request.lower() == "square":
-                client_socket.send("robot moving in square".encode("utf-8"))
+            msg = mav.vehicle_command_action_encode(int(time.time()), Mavlink_lib_vci.VEHICLE_ACTION_SQUARE)
+            client_socket.send("robot moving in square".encode("utf-8"))
 
         elif request.lower() == "circle":
-                client_socket.send("robot moving in circle".encode("utf-8"))
+            msg = mav.vehicle_command_action_encode(int(time.time()), Mavlink_lib_vci.VEHICLE_ACTION_CIRCLE)
+            client_socket.send("robot moving in circle".encode("utf-8"))
 
+        msg_packed = msg.pack(mav)
+        ser.write(msg_packed)
         print(f"Received: {request}")
 
         # response = "accepted".encode("utf-8") # convert string to bytes
@@ -74,6 +97,7 @@ def run_server():
     print("Connection to client closed")
     # close server socket
     server.close()
+    ser.close()
 
 if '__name__' == '__main__':
-    run_server()  
+    run_server()
