@@ -1,5 +1,7 @@
 import socket
-
+import serial
+import Mavlink_lib_vci
+import time
 
 def run_server():
     # create a socket object
@@ -31,6 +33,18 @@ def run_server():
             client_socket.send("closed".encode("utf-8"))
             break
 
+        elif request.lower() == "idle":
+                client_socket.send("robot doing nothing".encode("utf-8"))
+        
+        elif request.lower() == "stop":
+                client_socket.send("robot stopping action".encode("utf-8"))
+
+        elif request.lower() == "pause":
+                client_socket.send("robot pausing ...".encode("utf-8"))
+                
+        elif request.lower() == "resume":
+                client_socket.send("resume action".encode("utf-8"))
+                
         elif request.lower() == "forward":
                 client_socket.send("robot moving forward".encode("utf-8"))
 
@@ -42,6 +56,12 @@ def run_server():
 
         elif request.lower() == "right":
                 client_socket.send("robot rotating right".encode("utf-8"))
+                
+        elif request.lower() == "square":
+                client_socket.send("robot moving in square".encode("utf-8"))
+
+        elif request.lower() == "circle":
+                client_socket.send("robot moving in circle".encode("utf-8"))
 
         print(f"Received: {request}")
 
@@ -54,3 +74,6 @@ def run_server():
     print("Connection to client closed")
     # close server socket
     server.close()
+
+if '__name__' == '__main__':
+    run_server()  
